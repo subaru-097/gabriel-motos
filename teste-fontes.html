@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste Comparativo de Tipografia — Gabriel Motors</title>
+  
+  <!-- Google Fonts: Knewave, Sedgwick Ave Display, Caveat Brush, Bangers, Permanent Marker -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Caveat+Brush&family=Inter:wght@400;600;700&family=Knewave&family=Permanent+Marker&family=Sedgwick+Ave+Display&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #080a0e;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      padding: 2.5rem 2rem;
+      min-height: 100vh;
+    }
+
+    .header {
+      max-width: 1400px;
+      margin: 0 auto 2.5rem auto;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding-bottom: 1.5rem;
+    }
+
+    .header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      font-size: 0.95rem;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background: #0f131a;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      position: relative;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .card--ref {
+      grid-column: 1 / -1;
+      background: #141822;
+      border: 2px solid #D4FF00;
+    }
+
+    .card__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 0.75rem;
+    }
+
+    .card__title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .badge--ref {
+      background: #D4FF00;
+      color: #0b0d12;
+    }
+
+    .badge--font {
+      background: rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+    }
+
+    .badge--current {
+      background: #f59e0b;
+      color: #0b0d12;
+    }
+
+    .card__spec {
+      font-size: 0.75rem;
+      color: #64748b;
+      font-family: monospace;
+    }
+
+    /* Container do texto de demonstração */
+    .demo-stage {
+      background: #0b0d12;
+      border-radius: 8px;
+      padding: 2.25rem 2rem;
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      min-height: 230px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      overflow: hidden;
+    }
+
+    /* Regras comuns especificadas pelo usuário: mesmo tamanho, mesmo skewX(-8.5deg), mesma cor */
+    .title-sample {
+      font-size: 3rem;
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-transform: uppercase;
+      font-style: italic;
+      transform: skewX(-8.5deg);
+      transform-origin: left center;
+      text-rendering: geometricPrecision;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 2px rgba(0, 0, 0, 0.9);
+    }
+
+    .title-sample .line-highlight {
+      color: #D4FF00;
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .title-sample .swoosh {
+      width: 100%;
+      max-width: 280px;
+      height: 18px;
+      margin-top: -6px;
+      display: block;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+    }
+
+    /* Font Families Específicas */
+    .font-permanent-marker { font-family: 'Permanent Marker', cursive, sans-serif; }
+    .font-knewave { font-family: 'Knewave', cursive, sans-serif; }
+    .font-sedgwick { font-family: 'Sedgwick Ave Display', cursive, sans-serif; }
+    .font-caveat-brush { font-family: 'Caveat Brush', cursive, sans-serif; }
+    .font-bangers { font-family: 'Bangers', cursive, sans-serif; letter-spacing: 0.05em; }
+
+    /* Observação técnica de cada fonte */
+    .card__notes {
+      font-size: 0.825rem;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .card__notes strong {
+      color: #f1f5f9;
+    }
+
+    .ref-image-wrapper {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .ref-image-wrapper img {
+      max-height: 220px;
+      width: auto;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      object-fit: contain;
+      background: #000;
+    }
+
+    .ref-desc {
+      flex: 1;
+      min-width: 280px;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1>Teste Comparativo de Tipografia: "A PRÓXIMA CURVA PODE SER SUA."</h1>
+    <p>Todas as opções renderizadas estritamente com os mesmos parâmetros: <strong>Tamanho 3rem (48px)</strong>, <strong>skewX(-8.5deg)</strong>, <strong>Cores #ffffff e #D4FF00</strong>, e <strong>traço SVG sublinhado</strong>.</p>
+  </header>
+
+  <main class="grid">
+
+    <!-- 0. Referência Visual Original -->
+    <div class="card card--ref">
+      <div class="card__header">
+        <h2 class="card__title">
+          <span>REFERÊNCIA ORIGINAL (Design Enviado)</span>
+          <span class="badge badge--ref">Padrão Ouro</span>
+        </h2>
+        <span class="card__spec">Lettering Manual Personalizado</span>
+      </div>
+      <div class="ref-image-wrapper">
+        <img src="assets/ref-crop.jpg" alt="Recorte do título original da referência" onerror="this.src='media_1792088409573.jpg'; this.style.maxHeight='240px';">
+        <div class="ref-desc">
+          <strong>Características do Lettering da Referência:</strong><br>
+          • Pincel seco pesado (dry brush), com textura rústica e falhas orgânicas de tinta nas bordas.<br>
+          • Acentos agudos ("Ó") e til estilizados integrados ao traçado manual.<br>
+          • Estilo urbano/street "NFS Unbound", traçado livre não modular (letras repetidas como 'A' possuem variações únicas de traço desenhado à mão).
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. Permanent Marker (Atual) -->
+    <div class="card">
+      <div class="card__header">
+        <h2 class="card__title">
+          <span>1. Permanent Marker</span>
+          <span class="badge badge--current">Atual em Produção</span>
+        </h2>
+        <span class="card__spec">Google Fonts: 'Permanent Marker'</span>
+      </div>
+      <div class="demo-stage">
+        <div class="title-sample font-permanent-marker">
+          <span>A PRÓXIMA</span>
+          <span>CURVA PODE</span>
+          <span class="line-highlight">
+            <span>SER SUA.</span>
+            <svg class="swoosh" viewBox="0 0 280 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 14C60 6 180 4 276 11C230 18 120 22 28 17" stroke="#D4FF00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div class="card__notes">
+        <strong>Análise:</strong> Traço marcador permanente limpo. Mais fina e uniforme que a referência; as bordas são arredondadas e não apresentam a aspereza rústica de pincel seco da imagem original.
+      </div>
+    </div>
+
+    <!-- 2. Knewave -->
+    <div class="card">
+      <div class="card__header">
+        <h2 class="card__title">
+          <span>2. Knewave</span>
+          <span class="badge badge--font">Candidata 1</span>
+        </h2>
+        <span class="card__spec">Google Fonts: 'Knewave'</span>
+      </div>
+      <div class="demo-stage">
+        <div class="title-sample font-knewave">
+          <span>A PRÓXIMA</span>
+          <span>CURVA PODE</span>
+          <span class="line-highlight">
+            <span>SER SUA.</span>
+            <svg class="swoosh" viewBox="0 0 280 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 14C60 6 180 4 276 11C230 18 120 22 28 17" stroke="#D4FF00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div class="card__notes">
+        <strong>Análise:</strong> Traço muito mais espesso e pesado (bold brush). Possui peso dramático e agressivo similar ao poster, porém os cortes das hastes são retos/geométricos e não têm textura de cerdas desgastadas.
+      </div>
+    </div>
+
+    <!-- 3. Sedgwick Ave Display -->
+    <div class="card">
+      <div class="card__header">
+        <h2 class="card__title">
+          <span>3. Sedgwick Ave Display</span>
+          <span class="badge badge--font">Candidata 2</span>
+        </h2>
+        <span class="card__spec">Google Fonts: 'Sedgwick Ave Display'</span>
+      </div>
+      <div class="demo-stage">
+        <div class="title-sample font-sedgwick">
+          <span>A PRÓXIMA</span>
+          <span>CURVA PODE</span>
+          <span class="line-highlight">
+            <span>SER SUA.</span>
+            <svg class="swoosh" viewBox="0 0 280 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 14C60 6 180 4 276 11C230 18 120 22 28 17" stroke="#D4FF00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div class="card__notes">
+        <strong>Análise:</strong> Estilo grafite/tagger urbano de Nova York. Muito autêntica no estilo "street graffiti", mas a espessura do corpo das letras é fina e a legibilidade em alta velocidade diminui.
+      </div>
+    </div>
+
+    <!-- 4. Caveat Brush -->
+    <div class="card">
+      <div class="card__header">
+        <h2 class="card__title">
+          <span>4. Caveat Brush</span>
+          <span class="badge badge--font">Candidata 3</span>
+        </h2>
+        <span class="card__spec">Google Fonts: 'Caveat Brush'</span>
+      </div>
+      <div class="demo-stage">
+        <div class="title-sample font-caveat-brush">
+          <span>A PRÓXIMA</span>
+          <span>CURVA PODE</span>
+          <span class="line-highlight">
+            <span>SER SUA.</span>
+            <svg class="swoosh" viewBox="0 0 280 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 14C60 6 180 4 276 11C230 18 120 22 28 17" stroke="#D4FF00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div class="card__notes">
+        <strong>Análise:</strong> Pincel fluido e orgânico. É agradável e dinâmica, mas passa uma energia casual/artesanal ("handwritten"), faltando o peso agressivo de corrida e automobilismo.
+      </div>
+    </div>
+
+    <!-- 5. Bangers -->
+    <div class="card">
+      <div class="card__header">
+        <h2 class="card__title">
+          <span>5. Bangers</span>
+          <span class="badge badge--font">Candidata 4</span>
+        </h2>
+        <span class="card__spec">Google Fonts: 'Bangers'</span>
+      </div>
+      <div class="demo-stage">
+        <div class="title-sample font-bangers">
+          <span>A PRÓXIMA</span>
+          <span>CURVA PODE</span>
+          <span class="line-highlight">
+            <span>SER SUA.</span>
+            <svg class="swoosh" viewBox="0 0 280 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 14C60 6 180 4 276 11C230 18 120 22 28 17" stroke="#D4FF00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div class="card__notes">
+        <strong>Análise:</strong> Estilo quadrinhos de ação / pop art. Muito impactante e pesada, mas os vértices e curvas são limpos e cartoonizados, sem a aspereza de pincel ou grafite da referência.
+      </div>
+    </div>
+
+  </main>
+
+</body>
+</html>

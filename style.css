@@ -1,0 +1,2343 @@
+/* ==========================================================================
+   GABRIEL MOTORS — DESIGN SYSTEM & ESTILOS PRINCIPAIS
+   Composição Editorial Cinemática sobre Vídeo em Tela Cheia
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. DESIGN TOKENS (CSS VARIABLES)
+   -------------------------------------------------------------------------- */
+:root {
+  /* Paleta Concreto Arquitetônico e Neutros Balanceados */
+  --surface-ground: #f3f4f6;       /* Fundo neutro em cinza-concreto suave */
+  --surface-ground-alt: #e5e7eb;   /* Concreto de apoio para contraste */
+  --surface-card: #ffffff;         /* Superfície de card pura e nítida */
+  --surface-card-subtle: #f8fafc;  /* Superfície sutil para áreas secundárias */
+  --surface-dark: #0b0d12;         /* Grafite profundo / carvão escuro (fundo da Hero) */
+  --surface-dark-elevated: #1e293b;/* Superfície escura elevada */
+
+  /* Tipografia & Contraste (WCAG AAA) */
+  --text-primary: #0f172a;         /* Texto de alto contraste para seções claras */
+  --text-secondary: #475569;       /* Texto secundário em ardósia */
+  --text-muted: #64748b;           /* Legendas e metadados */
+  --text-inverse: #ffffff;         /* Texto branco puro sobre o vídeo */
+  --text-inverse-subtle: #e2e8f0;  /* Texto de apoio claro sobre o vídeo */
+  --text-inverse-muted: #94a3b8;   /* Texto esmaecido em fundos escuros */
+
+  /* Cores de Acento Automotivo (Harmonia com a logo e a adrenalina da pista) */
+  --accent-primary: #f59e0b;       /* Amarelo-ouro esportivo */
+  --accent-primary-hover: #fbbf24; /* Amarelo vibrante no hover */
+  --accent-racing-orange: #ea580c; /* Laranja esportivo para detalhes */
+
+  /* Bordas e Divisores */
+  --border-light: rgba(15, 23, 42, 0.08);
+  --border-medium: rgba(15, 23, 42, 0.14);
+  --border-dark-subtle: rgba(255, 255, 255, 0.12);
+
+  /* Sombras Naturais e Ambientais */
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.09), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+
+  /* Fontes e Tipografia */
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Raios de Arredondamento */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Curvas e Tempos de Animação */
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 180ms;
+  --duration-normal: 280ms;
+  --duration-slow: 450ms;
+  --duration-reveal: 750ms;
+}
+
+/* --------------------------------------------------------------------------
+   2. RESET E NORMAS GLOBAIS
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--text-primary);
+  background-color: var(--surface-ground);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  background-color: var(--surface-ground);
+}
+
+img, video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* Skip link de acessibilidade */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  background-color: var(--surface-dark);
+  color: var(--text-inverse);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  z-index: 9999;
+  transition: top var(--duration-fast) ease;
+  border: 2px solid var(--accent-primary);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Foco visível acessível */
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1.25rem, 4vw, 2.5rem);
+  padding-right: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+/* ==========================================================================
+   TELA DE CARREGAMENTO (LOADING SCREEN COM LOGO E PROGRESSO)
+   ========================================================================== */
+.hero-loader {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100svh;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: 
+    linear-gradient(rgba(11, 13, 18, 0.82), rgba(11, 13, 18, 0.90)),
+    radial-gradient(circle at 50% 40%, rgba(26, 32, 44, 0.6) 0%, rgba(11, 13, 18, 0.95) 100%),
+    url('poster.jpg') center center / cover no-repeat,
+    #0b0d12;
+  transition: opacity 500ms ease, visibility 500ms ease;
+  pointer-events: auto;
+}
+
+.hero-loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.hero-loader__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.hero-loader__logo {
+  width: 180px;
+  height: auto;
+  max-height: 70px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.9));
+  animation: loaderPulse 1.6s ease-in-out infinite;
+  user-select: none;
+}
+
+@keyframes loaderPulse {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.hero-loader__progress-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  width: 220px;
+}
+
+.hero-loader__percent {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.08em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+
+.hero-loader__track {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.hero-loader__bar {
+  width: 0%;
+  height: 100%;
+  background: #F5C518;
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 12px rgba(245, 197, 24, 0.8);
+  transition: width 150ms ease-out;
+}
+
+/* --------------------------------------------------------------------------
+   3. HERO SECTION — VÍDEO EM TELA CHEIA E COMPOSIÇÃO EDITORIAL
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: 
+    linear-gradient(rgba(11, 13, 18, 0.75), rgba(11, 13, 18, 0.85)),
+    radial-gradient(circle at 50% 40%, rgba(26, 32, 44, 0.5) 0%, rgba(11, 13, 18, 0.95) 100%),
+    url('poster.jpg') center center / cover no-repeat,
+    #0b0d12;
+  color: var(--text-inverse);
+  isolation: isolate;
+  margin: 0;
+  padding: 0;
+}
+
+/* Degradê Superior: ::before (160px de altura) */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 160px;
+  background: linear-gradient(to bottom, #0b0d12 0%, rgba(11, 13, 18, 0.6) 40%, transparent 100%);
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Degradê Inferior / Base: ::after (160px de altura) */
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 160px;
+  background: linear-gradient(to top, #0b0d12 0%, rgba(11, 13, 18, 0.6) 40%, transparent 100%);
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Contêiner dos Vídeos da Hero (Intro + Loop sobrepostos) */
+.hero__video-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+  background: 
+    linear-gradient(rgba(11, 13, 18, 0.75), rgba(11, 13, 18, 0.85)),
+    radial-gradient(circle at 50% 40%, rgba(26, 32, 44, 0.5) 0%, rgba(11, 13, 18, 0.95) 100%),
+    url('poster.jpg') center center / cover no-repeat,
+    #0b0d12;
+}
+
+.hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  display: block;
+  transition: opacity 300ms ease;
+}
+
+/* Vídeo da Intro: visível inicialmente */
+.hero__video--intro {
+  opacity: 1;
+  z-index: 2;
+}
+
+.hero__video--intro.is-faded {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Vídeo do Loop: oculto até o término da intro, assume com crossfade de 300ms */
+.hero__video--loop {
+  opacity: 0;
+  z-index: 1;
+}
+
+.hero__video--loop.is-active {
+  opacity: 1;
+  z-index: 3;
+}
+
+/* Nenhum degradê sobre a moto ou sobre o título */
+.hero__overlay {
+  display: none;
+}
+
+/* ==========================================================================
+   TOPO DA HERO: LOGO CENTRALIZADO & MENU HAMBÚRGUER
+   ========================================================================== */
+.hero__header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: clamp(1rem, 2.2vw, 1.8rem) clamp(1.5rem, 4vw, 3.5rem);
+  z-index: 30;
+  pointer-events: auto;
+}
+
+.hero__header-spacer {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.hero__logo-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.hero__logo {
+  width: clamp(170px, 15vw, 240px);
+  max-width: 260px;
+  height: auto;
+  max-height: 85px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.9));
+  user-select: none;
+  background: transparent;
+  transition: transform var(--duration-fast) ease;
+}
+
+.hero__logo-link:hover .hero__logo {
+  transform: scale(1.03);
+}
+
+/* Botão Hambúrguer Minimalista e Preciso (3 Linhas Brancas) */
+.hero__menu-toggle {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  transition: transform var(--duration-fast) ease;
+  z-index: 31;
+}
+
+.hero__hamburger-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 18px;
+  pointer-events: none;
+}
+
+.hero__hamburger-line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #ffffff;
+  border-radius: 2px;
+  transition: background-color var(--duration-fast) ease, transform 0.3s ease;
+}
+
+.hero__menu-toggle:hover .hero__hamburger-line {
+  background-color: #D4FF00;
+}
+
+.hero__menu-toggle:hover {
+  transform: scale(1.08);
+}
+
+/* ==========================================================================
+   MENU HAMBÚRGUER: OVERLAY E PAINEL DESLIZANTE (DRAWER COM SEQUÊNCIA)
+   ========================================================================== */
+.hero__drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100svh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 900;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.hero__drawer-backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.hero__drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(380px, 86vw);
+  height: 100vh;
+  height: 100svh;
+  background: rgba(11, 13, 18, 0.94);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.8);
+  z-index: 950;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(1.8rem, 4vh, 2.5rem) clamp(1.5rem, 3.5vw, 2.25rem);
+  transform: translateX(100%);
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: auto;
+}
+
+.hero__drawer.is-open {
+  transform: translateX(0);
+}
+
+.hero__drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hero__drawer-title {
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
+
+.hero__drawer-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-full);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.hero__drawer-close:hover {
+  background: rgba(212, 255, 0, 0.15);
+  border-color: #D4FF00;
+  color: #D4FF00;
+  transform: rotate(90deg);
+}
+
+.hero__drawer-nav {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.hero__drawer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  width: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Links com entrada em sequência elegante ao abrir */
+.hero__drawer-item {
+  opacity: 0;
+  transform: translateX(35px);
+  transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero__drawer.is-open .hero__drawer-item {
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: calc(0.12s + var(--item-index) * 0.07s);
+}
+
+.hero__drawer-link {
+  display: flex;
+  align-items: baseline;
+  gap: 1.1rem;
+  text-decoration: none;
+  color: #ffffff;
+  transition: color 0.2s ease, transform 0.22s ease;
+}
+
+.hero__drawer-num {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.32);
+  letter-spacing: 0.12em;
+  transition: color 0.2s ease;
+}
+
+.hero__drawer-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.hero__drawer-link:hover {
+  color: #D4FF00;
+  transform: translateX(8px);
+}
+
+.hero__drawer-link:hover .hero__drawer-num,
+.hero__drawer-link:hover .hero__drawer-text {
+  color: #D4FF00;
+}
+
+.hero__drawer-footer {
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hero__drawer-tagline {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+/* Container do Bloco Editorial da Hero (Posicionado com precisão absoluta fixa) */
+.hero__container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  margin: 0;
+  padding-left: clamp(2rem, 58vw, 59%);
+  padding-right: clamp(1.5rem, 3.5vw, 3rem);
+  padding-top: clamp(3.5rem, 7vh, 5.5rem);
+  padding-bottom: clamp(2.5rem, 5vh, 4rem);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Bloco Editorial com Entrada Suave da Direita (Gatilho em 6.0s) */
+.hero__content-side,
+.hero-text {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0;
+  background: transparent;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateX(80px);
+  transition: opacity 1.3s cubic-bezier(.22, .61, .36, 1),
+              transform 1.3s cubic-bezier(.22, .61, .36, 1);
+  will-change: opacity, transform;
+}
+
+.hero__content-side.show,
+.hero-text.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Título em Imagem PNG com Fundo Transparente */
+.hero__title {
+  margin: 0;
+  padding: 0;
+  display: block;
+  width: 100%;
+}
+
+.hero__title-img {
+  display: block;
+  width: clamp(320px, 37vw, 600px);
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.85));
+  background: transparent;
+  user-select: none;
+}
+
+/* Subtítulo em Caixa Alta e Espaçamento Amplo */
+.hero__subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(0.75rem, 0.95vw, 0.875rem);
+  line-height: 1.7;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 500;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.95);
+  margin-top: 0.25rem;
+}
+
+/* Call to Action: → EXPLORAR MOTOS */
+.hero__cta,
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-decoration: none;
+  margin-top: 0.5rem;
+  transition: transform var(--duration-fast) ease, color var(--duration-fast) ease;
+}
+
+.hero__cta:hover {
+  transform: translateX(4px);
+  color: #D4FF00;
+}
+
+.hero__cta-arrow {
+  color: #D4FF00;
+  font-size: 1.15rem;
+  font-weight: 700;
+  transition: transform var(--duration-fast) ease;
+}
+
+.hero__cta:hover .hero__cta-arrow {
+  transform: translateX(3px);
+}
+
+/* Indicador de Rolagem Central (Ícone de Mouse + ROLE PARA DESCOBRIR) */
+.hero__scroll-wrapper {
+  position: absolute;
+  bottom: clamp(1rem, 2.5vw, 1.75rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.hero__scroll-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  color: rgba(255, 255, 255, 0.85);
+  padding: 0.25rem 0.75rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--duration-fast) ease;
+}
+
+.hero__scroll-indicator:hover {
+  color: #D4FF00;
+}
+
+.hero__mouse-icon {
+  width: 16px;
+  height: 26px;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  border-radius: 9px;
+  display: flex;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+.hero__mouse-dot {
+  width: 3px;
+  height: 5px;
+  background-color: #ffffff;
+  border-radius: 2px;
+  animation: mouseScroll 1.8s ease-in-out infinite;
+}
+
+@keyframes mouseScroll {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  60% {
+    opacity: 0.2;
+    transform: translateY(7px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
+.hero__scroll-label {
+  font-family: var(--font-body);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9);
+}
+
+/* Canto Inferior Direito: Tagline de Estilo de Vida */
+.hero__corner-quote {
+  position: absolute;
+  bottom: clamp(1.2rem, 3vw, 2rem);
+  right: clamp(1.5rem, 5vw, 4rem);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  font-family: var(--font-body);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.55;
+  pointer-events: none;
+}
+
+/* Canto Inferior Esquerdo: Indicador de Progresso com Linha e 3 Pontos */
+.hero__progress-indicator {
+  position: absolute;
+  bottom: clamp(1.2rem, 3vw, 2rem);
+  left: clamp(1.5rem, 5vw, 4rem);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  pointer-events: none;
+}
+
+.hero__progress-bar {
+  width: 28px;
+  height: 2.5px;
+  background-color: #D4FF00;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(212, 255, 0, 0.6);
+}
+
+.hero__progress-dot {
+  width: 3.5px;
+  height: 3.5px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+}
+
+.hero__progress-dot.is-active {
+  background-color: #D4FF00;
+}
+
+@keyframes scrollPulse {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(200%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(200%);
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. CAMADAS E INDICADORES DA HERO
+   -------------------------------------------------------------------------- */
+.hero__scroll-wrapper {
+  opacity: 1;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+/* --------------------------------------------------------------------------
+   5. SEÇÃO 2 — CATEGORIAS DE MOTOS
+   -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------
+   5. SEÇÃO 2 — SELETOR DE ESTILOS DE MOTO (COMPACTA & CINEMÁTICA)
+   -------------------------------------------------------------------------- */
+.styles-section {
+  position: relative;
+  background: radial-gradient(circle at 50% 15%, rgba(20, 25, 35, 0.6) 0%, #06070a 100%), #06070a;
+  color: #ffffff;
+  padding-top: clamp(2.8rem, 5vw, 4.2rem);
+  padding-bottom: clamp(2rem, 3.5vw, 3rem);
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.styles-section__container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 3vw, 2.5rem);
+}
+
+/* Cabeçalho da Seção */
+.styles-section__header {
+  text-align: center;
+  margin-bottom: clamp(1.8rem, 3.2vw, 2.6rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.styles-section__tagline {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.68);
+  margin-bottom: clamp(0.75rem, 1.4vw, 1.1rem);
+}
+
+.styles-section__title {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.styles-section__title-img {
+  display: block;
+  width: clamp(270px, 38vw, 560px);
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.9));
+  user-select: none;
+}
+
+/* Carrossel de Estilos (com perspectiva para rotações 3D sutis) */
+.styles-carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 2.5vw, 3rem);
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  perspective: 1200px;
+}
+
+.styles-carousel__arrow {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, 0.9);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.22s ease, background-color 0.22s ease, border-color 0.22s ease, color 0.22s ease;
+  z-index: 25;
+}
+
+.styles-carousel__arrow:hover {
+  background: rgba(212, 255, 0, 0.15);
+  border-color: #D4FF00;
+  color: #D4FF00;
+  transform: scale(1.1);
+}
+
+/* Container da Pilha de Cartas (Deck) */
+.styles-deck-container {
+  position: relative;
+  width: 100%;
+  max-width: 940px;
+  height: 515px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1200px;
+  box-sizing: border-box;
+}
+
+.styles-deck {
+  position: relative;
+  width: 310px;
+  height: 515px;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  justify-items: center;
+}
+
+/* Estilo Individual dos Cards — Proporção vertical 310x515px (aumento de 15%) */
+.style-card {
+  grid-area: 1 / 1;
+  width: 310px;
+  height: 515px;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  outline: none;
+  transform-origin: center center;
+  user-select: none;
+  background: #06070a;
+  box-sizing: border-box;
+  /* Transição suave do baralho animando exclusivamente transform e opacity */
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+              filter 700ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 700ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.style-card__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #06070a;
+}
+
+/* Imagem vertical pura com corte sutil no topo e base — logo, moto e textos 100% inteiros */
+.style-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 46%;
+  display: block;
+  border-radius: 16px;
+}
+
+/* Suavização sutil apenas nos extremos (topo e base) para acabamento premium */
+.style-card__edge-softener {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(6, 7, 10, 0.16) 0%, transparent 6%, transparent 94%, rgba(6, 7, 10, 0.22) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   ESTADOS DE PILHA DO BARALHO (CENTRAL RETO, LATERAIS ESQUERDA E DIREITA RETAS)
+   ========================================================================== */
+
+/* Carta 0: Centro / Principal (em frente, inteira, destaque total) */
+.style-card[data-pos="0"],
+.style-card.is-active {
+  transform: translate3d(0, 0, 0) scale(1);
+  opacity: 1;
+  filter: brightness(1);
+  z-index: 10;
+  border: 1px solid rgba(212, 255, 0, 0.45);
+  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.95), 0 0 30px rgba(212, 255, 0, 0.16);
+  pointer-events: auto;
+  cursor: default;
+}
+
+/* Lado Direito: Próximas cartas */
+/* Carta +1: Imediata à direita atrás da central (coberta cerca de 1/3, ~67% visível) */
+.style-card[data-pos="1"] {
+  transform: translate3d(clamp(165px, 18vw, 205px), 0, -20px) scale(0.92);
+  opacity: 0.82;
+  filter: brightness(0.68);
+  z-index: 8;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Carta +2: Segunda à direita atrás (faixa lateral externa visível) */
+.style-card[data-pos="2"] {
+  transform: translate3d(clamp(255px, 28vw, 320px), 0, -40px) scale(0.85);
+  opacity: 0.55;
+  filter: brightness(0.42);
+  z-index: 6;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.75);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Lado Esquerdo: Cartas anteriores */
+/* Carta -1: Imediata à esquerda atrás da central (coberta cerca de 1/3, ~67% visível) */
+.style-card[data-pos="-1"] {
+  transform: translate3d(clamp(-205px, -18vw, -165px), 0, -20px) scale(0.92);
+  opacity: 0.82;
+  filter: brightness(0.68);
+  z-index: 8;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Carta -2: Segunda à esquerda atrás (faixa lateral externa visível) */
+.style-card[data-pos="-2"] {
+  transform: translate3d(clamp(-320px, -28vw, -255px), 0, -40px) scale(0.85);
+  opacity: 0.55;
+  filter: brightness(0.42);
+  z-index: 6;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.75);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Animações de Deslize Lateral (Estilo Baralho) */
+.style-card.slide-exit-next {
+  transform: translate3d(-140%, 0, 0) scale(0.92) !important;
+  opacity: 0 !important;
+  z-index: 20 !important;
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 700ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.style-card.slide-exit-prev {
+  transform: translate3d(140%, 0, 0) scale(0.92) !important;
+  opacity: 0 !important;
+  z-index: 20 !important;
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 700ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+/* Indicador de Barras de Progresso Embaixo */
+.styles-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 1.6rem auto 1.4rem auto;
+}
+
+.styles-progress__bar {
+  width: 28px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 2px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.styles-progress__bar.is-active {
+  width: 44px;
+  background: #D4FF00;
+  box-shadow: 0 0 10px rgba(212, 255, 0, 0.6);
+}
+
+/* Rodapé da Seção com Linhas */
+.styles-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.styles-footer__line {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.styles-footer__text {
+  font-family: var(--font-display);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   6. RODAPÉ INSTITUCIONAL
+   -------------------------------------------------------------------------- */
+.site-footer {
+  background-color: var(--surface-dark);
+  color: var(--text-inverse-muted);
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--border-dark-subtle);
+  margin-top: auto;
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.site-footer__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.site-footer__logo {
+  height: 38px;
+  width: auto;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+}
+
+.site-footer__name {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-inverse);
+  letter-spacing: -0.01em;
+}
+
+.site-footer__copy {
+  font-size: 0.8125rem;
+  color: var(--text-inverse-muted);
+}
+
+/* --------------------------------------------------------------------------
+   7. RESPONSIVIDADE (BREAKPOINTS)
+   -------------------------------------------------------------------------- */
+/* Telas Grandes (Desktop intermediário) */
+@media (max-width: 1200px) {
+  .hero__video {
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+
+  .hero__content-side {
+    max-width: 440px;
+  }
+
+  .style-card {
+    width: 295px;
+    height: 385px;
+  }
+
+  .style-card:not(.is-active) {
+    transform: scale(0.824, 0.841);
+  }
+
+  .style-card.is-active {
+    transform: scale(1, 1);
+  }
+}
+
+/* Tablets e Celulares (Até 768px) */
+@media (max-width: 768px) {
+  .hero {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .hero::before,
+  .hero::after {
+    height: clamp(35px, 18%, 55px);
+  }
+
+  .hero__header {
+    padding: 0.5rem 0.85rem;
+  }
+
+  .hero__header-spacer {
+    width: 34px;
+    height: 34px;
+  }
+
+  .hero__logo {
+    width: clamp(105px, 25vw, 135px);
+    max-height: 42px;
+  }
+
+  .hero__menu-toggle {
+    width: 34px;
+    height: 34px;
+  }
+
+  .hero__hamburger-icon {
+    width: 22px;
+    height: 14px;
+  }
+
+  .hero__video {
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+
+  .hero__container {
+    position: absolute;
+    inset: 0;
+    padding-left: clamp(0.75rem, 49vw, 51%);
+    padding-right: 0.75rem;
+    padding-top: 56px;
+    padding-bottom: 1.25rem;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .hero__content-side,
+  .hero-text {
+    max-width: 50%;
+    gap: 0.3rem;
+  }
+
+  .hero__title {
+    width: 100%;
+  }
+
+  .hero__title-img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .hero__mouse-icon {
+    width: 12px;
+    height: 18px;
+  }
+
+  .hero__mouse-dot {
+    width: 2px;
+    height: 3px;
+  }
+
+  .hero__scroll-label {
+    display: none;
+  }
+
+  .hero__corner-quote {
+    font-size: 0.44rem;
+    line-height: 1.35;
+    right: 0.75rem;
+    bottom: 0.35rem;
+  }
+
+  .hero__progress-indicator {
+    left: 0.75rem;
+    bottom: 0.35rem;
+  }
+
+  .hero__progress-bar {
+    width: 18px;
+    height: 2px;
+  }
+
+  /* Seção 2 — Responsividade Mobile (1 card por vez ~70% da tela) */
+  .styles-section {
+    padding-top: clamp(2.2rem, 6vw, 3.2rem);
+    padding-bottom: 2.2rem;
+  }
+
+  .styles-section__header {
+    margin-bottom: 1.4rem;
+  }
+
+  .styles-section__tagline {
+    font-size: 0.65rem;
+    letter-spacing: 0.24em;
+    margin-bottom: 0.55rem;
+  }
+
+  .styles-section__title-img {
+    width: clamp(240px, 80vw, 400px);
+  }
+
+  .styles-carousel {
+    justify-content: center;
+    gap: 0;
+    width: 100%;
+    position: relative;
+    touch-action: pan-y;
+  }
+
+  .styles-carousel__arrow {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    background: rgba(10, 10, 15, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 30;
+  }
+
+  .styles-carousel__arrow--prev {
+    left: 6px;
+  }
+
+  .styles-carousel__arrow--next {
+    right: 6px;
+  }
+
+  .styles-deck-container {
+    width: 100%;
+    max-width: 100%;
+    height: clamp(430px, 116vw, 475px);
+    padding-top: 0;
+  }
+
+  .styles-deck {
+    width: clamp(260px, 70vw, 285px);
+    height: clamp(430px, 116vw, 475px);
+  }
+
+  .style-card {
+    width: clamp(260px, 70vw, 285px);
+    height: clamp(430px, 116vw, 475px);
+  }
+
+  /* Na pilha mobile horizontal, cartas laterais visíveis sutilmente nas bordas */
+  .style-card[data-pos="0"],
+  .style-card.is-active {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 1;
+    z-index: 10;
+  }
+
+  .style-card[data-pos="1"] {
+    transform: translate3d(44px, 0, -20px) scale(0.92);
+    opacity: 0.82;
+    z-index: 8;
+  }
+
+  .style-card[data-pos="2"] {
+    transform: translate3d(74px, 0, -40px) scale(0.85);
+    opacity: 0.52;
+    z-index: 6;
+  }
+
+  .style-card[data-pos="-1"] {
+    transform: translate3d(-44px, 0, -20px) scale(0.92);
+    opacity: 0.82;
+    z-index: 8;
+  }
+
+  .style-card[data-pos="-2"] {
+    transform: translate3d(-74px, 0, -40px) scale(0.85);
+    opacity: 0.52;
+    z-index: 6;
+  }
+
+  .styles-progress {
+    margin: 1.3rem auto 1.15rem auto;
+  }
+
+  .styles-footer {
+    padding: 0 1rem;
+  }
+
+  .styles-footer__text {
+    font-size: 0.56rem;
+    letter-spacing: 0.18em;
+  }
+}
+
+/* Mobile Estreito (Até 480px) */
+@media (max-width: 480px) {
+  .hero__header {
+    padding: 0.4rem 0.65rem;
+  }
+
+  .hero__header-spacer {
+    width: 30px;
+    height: 30px;
+  }
+
+  .hero__logo {
+    width: clamp(95px, 24vw, 120px);
+    max-height: 36px;
+  }
+
+  .hero__menu-toggle {
+    width: 30px;
+    height: 30px;
+  }
+
+  .hero__hamburger-icon {
+    width: 20px;
+    height: 13px;
+  }
+
+  .hero__container {
+    padding-left: clamp(0.5rem, 47vw, 49%);
+    padding-right: 0.5rem;
+    padding-top: 52px;
+    padding-bottom: 1.25rem;
+  }
+
+  .hero__content-side {
+    max-width: 52%;
+    gap: 0.2rem;
+  }
+
+  .hero__corner-quote {
+    font-size: 0.4rem;
+    right: 0.5rem;
+    bottom: 0.25rem;
+  }
+
+  .hero__progress-indicator {
+    left: 0.5rem;
+    bottom: 0.25rem;
+  }
+}
+
+/* ==========================================================================
+   9. MODAL DE DETALHES DA MOTOCICLETA E POP-UP FAVORITAR (SESSÃO 2)
+   ========================================================================== */
+
+.moto-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 350ms cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.moto-modal-backdrop.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.moto-modal {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  background: #0d0e12;
+  border: 1px solid #2A2A2A;
+  border-radius: 16px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.95), 0 0 40px rgba(0, 0, 0, 0.8);
+  padding: 0 0 1rem 0;
+  box-sizing: border-box;
+  transform: scale(1);
+  opacity: 1;
+  transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 350ms cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+
+.moto-modal-backdrop.is-hidden .moto-modal {
+  transform: scale(0.96);
+  opacity: 0;
+}
+
+/* Botão Fechar Modal (X) posicionado no canto superior direito sobre a foto */
+.moto-modal__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(13, 14, 18, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #9CA3AF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 25;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.moto-modal__close:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+/* Área da foto no topo: de ponta a ponta sem padding, cantos superiores arredondados */
+.moto-modal__media {
+  position: relative;
+  width: 100%;
+  height: 215px;
+  border-radius: 16px 16px 0 0;
+  overflow: hidden;
+  background: #06070a;
+  margin: 0;
+  cursor: pointer;
+}
+
+.moto-modal__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 20px 20px 0 0;
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease;
+}
+
+.moto-modal__media:hover .moto-modal__img {
+  transform: scale(1.02);
+}
+
+/* Reflexo sutil espelhado na base da imagem */
+.moto-modal__img-reflection {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px 20px 0 0;
+  background: linear-gradient(180deg, transparent 72%, rgba(13, 14, 18, 0.75) 100%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Informações da moto abaixo da imagem */
+.moto-modal__content {
+  display: flex;
+  flex-direction: column;
+  padding: 0.95rem 1.15rem 0.2rem 1.15rem;
+  box-sizing: border-box;
+}
+
+/* Marca em amarelo pontual */
+.moto-modal__brand {
+  font-size: 0.74rem;
+  font-weight: 900;
+  font-style: italic;
+  color: #D4FF00;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.15rem;
+}
+
+/* Modelo em destaque branco */
+.moto-modal__model {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 0.35rem 0;
+}
+
+.moto-modal__color-box {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.moto-modal__color-label {
+  font-size: 0.82rem;
+  color: #9CA3AF;
+}
+
+.moto-modal__color-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #E5E7EB;
+}
+
+.moto-modal__color-pills {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.moto-modal__color-pill {
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #2A2A2A;
+  color: #9CA3AF;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.moto-modal__color-pill:hover,
+.moto-modal__color-pill.is-active {
+  background: rgba(212, 255, 0, 0.12);
+  border-color: #D4FF00;
+  color: #D4FF00;
+}
+
+/* Grid de especificações (ano, km) com cinza neutro */
+.moto-modal__specs-grid {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 0.55rem;
+}
+
+.moto-modal__spec,
+.moto-modal__location {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #9CA3AF;
+  font-size: 0.9rem;
+}
+
+.moto-modal__location {
+  margin-bottom: 0.85rem;
+}
+
+.moto-modal__icon {
+  color: #9CA3AF;
+  flex-shrink: 0;
+}
+
+.moto-modal__spec-val {
+  font-weight: 500;
+  color: #E5E7EB;
+}
+
+/* Rodapé do modal: Preço à esquerda e botões pequenos com ícones à direita */
+.moto-modal__footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.25rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #1E2028;
+}
+
+.moto-modal__price-wrapper {
+  margin-bottom: 0;
+}
+
+.moto-modal__price {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.moto-modal__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Botões Pequenos e Circulares */
+.moto-modal__btn-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  text-decoration: none;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 0.2s ease,
+              border-color 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+/* Botão Favoritar: Ícone Coração Rosa */
+.moto-modal__btn-circle--favorite {
+  background: #18191E;
+  border: 1px solid #2A2A2A;
+  color: #F43F5E;
+}
+
+.moto-modal__btn-circle--favorite:hover {
+  background: rgba(244, 63, 94, 0.12);
+  border-color: #F43F5E;
+  transform: scale(1.08);
+  box-shadow: 0 0 16px rgba(244, 63, 94, 0.35);
+}
+
+.moto-modal__btn-circle--favorite.is-favorited {
+  background: rgba(244, 63, 94, 0.2);
+  border-color: #F43F5E;
+  color: #F43F5E;
+}
+
+.moto-modal__btn-circle--favorite.is-favorited .moto-modal__heart-svg {
+  fill: #F43F5E;
+  stroke: #F43F5E;
+}
+
+/* Botão WhatsApp: Verde Oficial */
+.moto-modal__btn-circle--whatsapp {
+  background: #25D366;
+  border: 1px solid #25D366;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+}
+
+.moto-modal__btn-circle--whatsapp:hover {
+  background: #20BD5A;
+  border-color: #20BD5A;
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+}
+
+/* ==========================================================================
+   POP-UP DE FAVORITAR (SOBREPOSTO AO MODAL)
+   ========================================================================== */
+
+.favorite-popup {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 14, 18, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 25;
+  border-radius: 20px;
+  padding: 2rem 1.6rem 1.8rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  transition: opacity 280ms cubic-bezier(0.22, 1, 0.36, 1),
+              transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 280ms;
+}
+
+.favorite-popup.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.95);
+  pointer-events: none;
+}
+
+.favorite-popup__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.favorite-popup__close:hover {
+  background: rgba(212, 255, 0, 0.18);
+  border-color: #D4FF00;
+  color: #D4FF00;
+}
+
+/* Logo transparente Gabriel Motos no pop-up */
+.favorite-popup__brand {
+  margin-bottom: 0.85rem;
+}
+
+.favorite-popup__logo {
+  max-width: 100px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.8));
+}
+
+.favorite-popup__title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.4rem 0;
+}
+
+.favorite-popup__subtitle {
+  font-size: 0.84rem;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.4;
+  margin: 0 0 1.3rem 0;
+  max-width: 320px;
+}
+
+.favorite-popup__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.favorite-popup__field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  width: 100%;
+}
+
+.favorite-popup__label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.favorite-popup__input {
+  width: 100%;
+  padding: 0.75rem 0.95rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.favorite-popup__input:focus {
+  border-color: #D4FF00;
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 0 0 3px rgba(212, 255, 0, 0.2);
+}
+
+.favorite-popup__error {
+  font-size: 0.78rem;
+  color: #ff5252;
+  text-align: left;
+  margin-top: -0.2rem;
+}
+
+.favorite-popup__submit-btn {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  background: #D4FF00;
+  border: none;
+  color: #06070a;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 0.4rem;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.favorite-popup__submit-btn:hover {
+  background: #c3eb00;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(212, 255, 0, 0.35);
+}
+
+.favorite-popup__success {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #D4FF00;
+  font-size: 0.88rem;
+  font-weight: 700;
+  background: rgba(212, 255, 0, 0.1);
+  border: 1px solid rgba(212, 255, 0, 0.3);
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   10. SEÇÃO 3 — SELETOR E FILTRO DE MOTOS (ÁREA DE FILTRO)
+   ========================================================================== */
+
+.filter-section {
+  position: relative;
+  width: 100%;
+  background: #08090d;
+  padding: 1.25rem 1.25rem clamp(2rem, 4vw, 3rem) 1.25rem;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.filter-section__container {
+  width: 100%;
+  max-width: 1060px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ==========================================================================
+   GRADE DE CARDS DAS MOTOS (ESTILO WEBMOTORS — 3 COLUNAS)
+   ========================================================================== */
+
+.motos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto 2rem auto;
+  opacity: 1;
+  transition: opacity 250ms ease;
+  box-sizing: border-box;
+}
+
+.motos-grid.is-fading {
+  opacity: 0;
+}
+
+/* Card Reto com Bordas Arredondadas Discretas */
+.moto-grid-card {
+  background: #0f1015;
+  border: 1px solid #2A2A2A;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.25s ease,
+              box-shadow 0.25s ease;
+  box-sizing: border-box;
+  text-decoration: none;
+  outline: none;
+}
+
+.moto-grid-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212, 255, 0, 0.45);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.85), 0 0 18px rgba(212, 255, 0, 0.08);
+}
+
+.moto-grid-card:focus-visible {
+  border-color: #D4FF00;
+  box-shadow: 0 0 0 2px rgba(212, 255, 0, 0.4);
+}
+
+/* Imagem no topo na proporção 10:11 (corta um pouco em cima e embaixo, mantendo logo e moto nítidos) */
+.moto-grid-card__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 10 / 11;
+  overflow: hidden;
+  background: #06070a;
+}
+
+.moto-grid-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.moto-grid-card:hover .moto-grid-card__img {
+  transform: scale(1.03);
+}
+
+/* Badge de Categoria no Canto Superior Esquerdo */
+.moto-grid-card__badge-cat {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(13, 14, 18, 0.88);
+  border: 1px solid rgba(212, 255, 0, 0.45);
+  color: #D4FF00;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2;
+  text-transform: uppercase;
+}
+
+/* Botão Favoritar Rosa no Canto Superior Direito */
+.moto-grid-card__btn-favorite {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(13, 14, 18, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #F43F5E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  outline: none;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.moto-grid-card__btn-favorite:hover {
+  transform: scale(1.12);
+  border-color: #F43F5E;
+  background: rgba(244, 63, 94, 0.15);
+  box-shadow: 0 0 12px rgba(244, 63, 94, 0.4);
+}
+
+.moto-grid-card__btn-favorite.is-favorited svg {
+  fill: #F43F5E;
+}
+
+/* Corpo do Card */
+.moto-grid-card__body {
+  padding: 0.85rem 0.95rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  box-sizing: border-box;
+}
+
+/* Linha com Marca e Ano */
+.moto-grid-card__header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.2rem;
+}
+
+.moto-grid-card__brand {
+  font-size: 0.72rem;
+  font-weight: 900;
+  font-style: italic;
+  color: #D4FF00;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.moto-grid-card__year {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #E5E7EB;
+}
+
+/* Modelo em Destaque */
+.moto-grid-card__model {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.65rem 0;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+/* Caixa de Informações em Grade 2x2 com Borda Cinza */
+.moto-grid-card__specs-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 0.65rem;
+  padding: 0.6rem 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #2A2A2A;
+  border-radius: 8px;
+  margin-bottom: 0.85rem;
+  box-sizing: border-box;
+}
+
+.moto-grid-card__spec-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #9CA3AF;
+  font-size: 0.75rem;
+  overflow: hidden;
+}
+
+.moto-grid-card__spec-icon {
+  color: #9CA3AF;
+  flex-shrink: 0;
+  width: 13px;
+  height: 13px;
+}
+
+.moto-grid-card__spec-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #D1D5DB;
+  font-weight: 500;
+}
+
+/* Rodapé do Card: Preço em Monospace + Botão WhatsApp */
+.moto-grid-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px solid #1E2028;
+}
+
+.moto-grid-card__price {
+  font-family: 'SF Mono', 'Roboto Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: 1.28rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.moto-grid-card__btn-whatsapp {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  flex-shrink: 0;
+}
+
+.moto-grid-card__btn-whatsapp:hover {
+  background: #20BD5A;
+  transform: scale(1.08);
+}
+
+/* Botão VER ESTOQUE COMPLETO (Design Sóbrio em Amarelo Uniforme #D9C35A) */
+.filter-section__cta-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.btn-ver-estoque {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.65rem 1.6rem;
+  border-radius: 9999px;
+  background: #D9C35A;
+  color: #0b0c10;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-ver-estoque:hover {
+  background: #cbb54f;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.btn-ver-estoque__icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.btn-ver-estoque__arrow {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+
+.btn-ver-estoque:hover .btn-ver-estoque__arrow {
+  transform: translateX(3px);
+}
+
+/* Responsividade da Grade */
+@media (max-width: 992px) {
+  .motos-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 700px;
+    gap: 1.15rem;
+  }
+}
+
+@media (max-width: 580px) {
+  .motos-grid {
+    grid-template-columns: 1fr;
+    max-width: 325px;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .moto-modal {
+    max-width: calc(100vw - 24px);
+    padding: 0 0 1rem 0;
+    max-height: 94vh;
+    overflow-y: auto;
+  }
+
+  .moto-modal__media {
+    height: 185px;
+  }
+
+  .moto-modal__model {
+    font-size: 1.25rem;
+  }
+
+  .moto-modal__price {
+    font-size: 1.35rem;
+  }
+
+  .favorite-popup {
+    padding: 1.25rem 1rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   8. ACESSIBILIDADE E PREFERS-REDUCED-MOTION
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Revela todos os elementos da Hero imediatamente sem transição */
+  .hero:not(.is-revealed) .hero__brand-header,
+  .hero:not(.is-revealed) .hero__content-side,
+  .hero:not(.is-revealed) .hero__scroll-wrapper {
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  .hero__scroll-line {
+    animation: none !important;
+  }
+
+  /* Desativa animações 3D e curvas nos cards, mantendo apenas fade suave */
+  .style-card,
+  .filter-card {
+    transition: opacity 300ms ease !important;
+    transform: none !important;
+  }
+}

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>Gabriel Motors | A próxima curva pode ser sua</title>
+  <meta name="description" content="Potência, estrada e liberdade. Encontre a moto que combina com o seu próximo destino na Gabriel Motors.">
+  <meta name="keywords" content="motos, alta cilindrada, motos esportivas, naked, speed, big trail, Gabriel Motors">
+  <meta name="author" content="Gabriel Motors">
+  <meta name="theme-color" content="#0b0f19">
+
+  <!-- Open Graph / Redes Sociais -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Gabriel Motors | A próxima curva pode ser sua">
+  <meta property="og:description" content="Potência, estrada e liberdade. Encontre a moto que combina com o seu próximo destino.">
+  <meta property="og:image" content="assets/hero-poster.jpg">
+  <meta property="og:locale" content="pt_BR">
+
+  <!-- Google Fonts: Outfit (Display Editorial), Inter (Textos) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Estilos Principais -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Schema.org Dados Estruturados -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AutoDealer",
+    "name": "Gabriel Motors",
+    "image": "logo gabriel motos.png",
+    "description": "Concessionária especializada em motocicletas novas e seminovas de alta cilindrada.",
+    "url": "https://gabrielmotors.com.br",
+    "telephone": "+55 11 99999-9999",
+    "priceRange": "$$$$"
+  }
+  </script>
+</head>
+<body>
+
+  <!-- =========================================================================
+       TELA DE CARREGAMENTO (LOADING SCREEN COM LOGO E PROGRESSO)
+       ========================================================================= -->
+  <div id="hero-loader" class="hero-loader" role="progressbar" aria-label="Carregando experiência Gabriel Motos" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <div class="hero-loader__content">
+      <img
+        src="logo gabriel motos.png"
+        alt="Gabriel Motos"
+        class="hero-loader__logo"
+        id="loader-logo"
+        width="180"
+        height="180"
+        loading="eager"
+      >
+      <div class="hero-loader__progress-wrap">
+        <span id="hero-loader-percent" class="hero-loader__percent">0%</span>
+        <div class="hero-loader__track">
+          <div id="hero-loader-bar" class="hero-loader__bar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skip link de acessibilidade -->
+  <a href="#conteudo-principal" class="skip-link">Pular para o conteúdo principal</a>
+
+  <!-- =========================================================================
+       HERO SECTION — VÍDEO CINEMÁTICO EM TELA CHEIA & COMPOSIÇÃO EDITORIAL
+       ========================================================================= -->
+  <section id="hero" class="hero" aria-label="Apresentação Gabriel Motors">
+    
+    <!-- Fundo de Vídeo em Tela Cheia (Intro + Loop Contínuo com Crossfade) -->
+    <div class="hero__video-wrapper" aria-hidden="true">
+      <!-- Vídeo 1: Introdução (executa uma vez sem loop) -->
+      <video
+        id="hero-video-intro"
+        class="hero__video hero__video--intro"
+        autoplay
+        muted
+        playsinline
+        preload="auto"
+        poster="poster.jpg"
+        tabindex="-1"
+      >
+        <source src="s1000rr-intro.mp4" type="video/mp4">
+        Seu navegador não suporta a reprodução deste vídeo.
+      </video>
+
+      <!-- Vídeo 2: Loop Contínuo (preparado, oculto inicialmente, loop nativo) -->
+      <video
+        id="hero-video-loop"
+        class="hero__video hero__video--loop"
+        autoplay
+        muted
+        playsinline
+        preload="auto"
+        loop
+        poster="poster.jpg"
+        tabindex="-1"
+      >
+        <source src="s1000rr-lop-2.mp4" type="video/mp4">
+      </video>
+
+      <div class="hero__overlay"></div>
+    </div>
+
+    <!-- Topo da Hero: Logo Centralizado + Menu Hambúrguer no Canto Superior Direito -->
+    <header class="hero__header" id="hero-brand" aria-label="Navegação da Hero">
+      <div class="hero__header-spacer" aria-hidden="true"></div>
+
+      <!-- Centro: Logo Gabriel Motos Grande e Proporcional -->
+      <a href="#hero" class="hero__logo-link" aria-label="Gabriel Motos início">
+        <img
+          src="logo gabriel motos.png"
+          alt="Gabriel Motos - Logotipo oficial"
+          class="hero__logo"
+          id="hero-logo"
+          width="210"
+          height="auto"
+          loading="eager"
+        >
+      </a>
+
+      <!-- Canto Superior Direito: Botão do Menu Hambúrguer (3 linhas) -->
+      <button
+        id="hero-menu-toggle"
+        class="hero__menu-toggle"
+        aria-label="Abrir menu de navegação"
+        aria-expanded="false"
+        aria-controls="hero-drawer"
+        type="button"
+      >
+        <span class="hero__hamburger-icon" aria-hidden="true">
+          <span class="hero__hamburger-line line-1"></span>
+          <span class="hero__hamburger-line line-2"></span>
+          <span class="hero__hamburger-line line-3"></span>
+        </span>
+      </button>
+    </header>
+
+    <!-- Overlay e Painel Deslizante do Menu Hambúrguer (Drawer com Blur e Sequência de Links) -->
+    <div id="hero-drawer-backdrop" class="hero__drawer-backdrop" aria-hidden="true"></div>
+    <aside id="hero-drawer" class="hero__drawer" role="dialog" aria-label="Menu de navegação" aria-modal="true" aria-hidden="true">
+      <div class="hero__drawer-header">
+        <span class="hero__drawer-title">MENU</span>
+        <button id="hero-drawer-close" class="hero__drawer-close" aria-label="Fechar menu" type="button">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="hero__drawer-nav" aria-label="Links do menu">
+        <ul class="hero__drawer-list">
+          <li class="hero__drawer-item" style="--item-index: 0;">
+            <a href="#hero" class="hero__drawer-link">
+              <span class="hero__drawer-num">01</span>
+              <span class="hero__drawer-text">Início</span>
+            </a>
+          </li>
+          <li class="hero__drawer-item" style="--item-index: 1;">
+            <a href="#categorias" class="hero__drawer-link">
+              <span class="hero__drawer-num">02</span>
+              <span class="hero__drawer-text">Motos</span>
+            </a>
+          </li>
+          <li class="hero__drawer-item" style="--item-index: 2;">
+            <a href="#sobre" class="hero__drawer-link">
+              <span class="hero__drawer-num">03</span>
+              <span class="hero__drawer-text">Sobre</span>
+            </a>
+          </li>
+          <li class="hero__drawer-item" style="--item-index: 3;">
+            <a href="#contato" class="hero__drawer-link">
+              <span class="hero__drawer-num">04</span>
+              <span class="hero__drawer-text">Contato</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="hero__drawer-footer">
+        <span class="hero__drawer-tagline">Mais que motos, é estilo de vida.</span>
+      </div>
+    </aside>
+
+    <!-- Bloco Editorial na Lateral Direita (Tipografia Brush Script e Layout Editorial) -->
+    <div class="hero__container" id="conteudo-principal">
+      <div class="hero__content-side hero-text" id="heroText">
+        <h1 class="hero__title">
+          <img
+            src="assets/titulo-hero.png"
+            alt="A próxima curva pode ser sua."
+            class="hero__title-img"
+            id="hero-title-img"
+            width="1024"
+            height="438"
+            loading="eager"
+          >
+        </h1>
+      </div>
+    </div>
+
+    <!-- Indicador de Rolagem Central (Mouse com ponto e texto ROLE PARA DESCOBRIR) -->
+    <div class="hero__scroll-wrapper" id="hero-scroll">
+      <a href="#categorias" class="hero__scroll-indicator" aria-label="Role para descobrir as categorias">
+        <span class="hero__mouse-icon" aria-hidden="true">
+          <span class="hero__mouse-dot"></span>
+        </span>
+        <span class="hero__scroll-label">ROLE PARA DESCOBRIR</span>
+      </a>
+    </div>
+
+    <!-- Canto Inferior Esquerdo: Indicador de Progresso com Linha e 3 Pontos -->
+    <div class="hero__progress-indicator" aria-hidden="true">
+      <span class="hero__progress-bar"></span>
+      <span class="hero__progress-dot is-active"></span>
+      <span class="hero__progress-dot"></span>
+      <span class="hero__progress-dot"></span>
+    </div>
+
+    <!-- Canto Inferior Direito: Tagline de Estilo de Vida -->
+    <div class="hero__corner-quote" aria-hidden="true">
+      <span>MAIS QUE MOTOS,</span>
+      <span>É ESTILO DE VIDA.</span>
+    </div>
+
+  </section>
+
+  <!-- =========================================================================
+       SEÇÃO 2 — ESCOLHA O ESTILO DA SUA PRÓXIMA MOTO (CATEGORIAS)
+       ========================================================================= -->
+  <main>
+    <section id="categorias" class="styles-section" aria-labelledby="styles-section-title">
+      <div class="styles-section__container">
+        
+        <!-- Cabeçalho da Seção -->
+        <header class="styles-section__header">
+          <span class="styles-section__tagline">ENCONTRE O ESTILO PERFEITO</span>
+          <h2 id="styles-section-title" class="styles-section__title">
+            <img
+              src="assets/titulo-estilos.png"
+              alt="Escolha o estilo da sua próxima moto"
+              class="styles-section__title-img"
+              id="styles-title-img"
+              width="1024"
+              height="285"
+              loading="lazy"
+            >
+          </h2>
+        </header>
+
+        <!-- Carrossel / Pilha de Estilos de Moto (Deck Stack) -->
+        <div class="styles-carousel" id="styles-carousel">
+          <!-- Seta Esquerda -->
+          <button class="styles-carousel__arrow styles-carousel__arrow--prev" id="styles-prev" aria-label="Estilo anterior" type="button">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+
+          <!-- Pilha de Cartas (Deck) -->
+          <div class="styles-deck-container" id="styles-deck-container">
+            <div class="styles-deck" id="styles-deck">
+              
+              <!-- Card 1: Urbana / Naked (Posição Esquerda -1) -->
+              <article class="style-card" data-index="0" data-pos="-1" tabindex="0" role="group" aria-label="Estilo Urbana - Naked">
+                <div class="style-card__inner">
+                  <img src="urbana-naked.jpg" alt="Urbana - Naked" class="style-card__img" loading="lazy">
+                  <div class="style-card__edge-softener" aria-hidden="true"></div>
+                </div>
+              </article>
+
+              <!-- Card 2: Alta Performance / Esportiva (Card Ativo da Frente) -->
+              <article class="style-card is-active" data-index="1" data-pos="0" tabindex="0" role="group" aria-label="Estilo Alta Performance - Esportiva">
+                <div class="style-card__inner">
+                  <img src="alta-performance-esportiva.jpg" alt="Alta Performance - Esportiva" class="style-card__img" loading="lazy">
+                  <div class="style-card__edge-softener" aria-hidden="true"></div>
+                </div>
+              </article>
+
+              <!-- Card 3: Aventura / Big Trail (Posição Direita +1) -->
+              <article class="style-card" data-index="2" data-pos="1" tabindex="0" role="group" aria-label="Estilo Aventura - Big Trail">
+                <div class="style-card__inner">
+                  <img src="aventura-big-trail.jpg" alt="Aventura - Big Trail" class="style-card__img" loading="lazy">
+                  <div class="style-card__edge-softener" aria-hidden="true"></div>
+                </div>
+              </article>
+
+              <!-- Card 4: Dia a dia / Touring (Posição Direita +2) -->
+              <article class="style-card" data-index="3" data-pos="2" tabindex="0" role="group" aria-label="Estilo Dia a dia - Touring">
+                <div class="style-card__inner">
+                  <img src="dia-a-dia-versatil.jpg" alt="Dia a dia - Touring" class="style-card__img" loading="lazy">
+                  <div class="style-card__edge-softener" aria-hidden="true"></div>
+                </div>
+              </article>
+
+              <!-- Card 5: Todas as Categorias (Posição Esquerda -2) -->
+              <article class="style-card" data-index="4" data-pos="-2" tabindex="0" role="group" aria-label="Todas as Categorias">
+                <div class="style-card__inner">
+                  <img src="todas-a-categorias.jpg" alt="Todas as Categorias" class="style-card__img" loading="lazy">
+                  <div class="style-card__edge-softener" aria-hidden="true"></div>
+                </div>
+              </article>
+
+            </div>
+          </div>
+
+          <!-- Seta Direita -->
+          <button class="styles-carousel__arrow styles-carousel__arrow--next" id="styles-next" aria-label="Próximo estilo" type="button">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Indicador de Barras de Progresso Embaixo (5 Categorias) -->
+        <div class="styles-progress" id="styles-progress" role="tablist" aria-label="Indicadores dos estilos">
+          <button class="styles-progress__bar" data-index="0" aria-label="Ir para Urbana"></button>
+          <button class="styles-progress__bar is-active" data-index="1" aria-label="Ir para Alta Performance"></button>
+          <button class="styles-progress__bar" data-index="2" aria-label="Ir para Aventura"></button>
+          <button class="styles-progress__bar" data-index="3" aria-label="Ir para Dia a dia"></button>
+          <button class="styles-progress__bar" data-index="4" aria-label="Ir para Todas as Categorias"></button>
+        </div>
+
+        <!-- Rodapé da Seção com Linhas Laterais -->
+        <div class="styles-footer">
+          <span class="styles-footer__line" aria-hidden="true"></span>
+          <span class="styles-footer__text">NOSSO ESTOQUE</span>
+          <span class="styles-footer__line" aria-hidden="true"></span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SEÇÃO 3 — SELETOR E FILTRO DE MOTOS (GRADE ESTILO WEBMOTORS)
+         ========================================================================= -->
+    <section id="filtro-motos" class="filter-section" aria-label="Estoque de motos em destaque">
+      <div class="filter-section__container">
+        
+        <!-- Grade de Cards das Motos (Sincronizada com o Carrossel da Sessão 2) -->
+        <div class="motos-grid" id="motos-grid" role="region" aria-live="polite">
+          <!-- Renderizado dinamicamente via JavaScript -->
+        </div>
+
+        <!-- Botão VER ESTOQUE COMPLETO (Design Sóbrio em Amarelo Uniforme #D9C35A) -->
+        <div class="filter-section__cta-wrapper">
+          <a href="#estoque" class="btn-ver-estoque" id="btn-ver-estoque" aria-label="Ver estoque completo de motos">
+            <svg class="btn-ver-estoque__icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-5h14v5z"/>
+              <circle cx="7.5" cy="14.5" r="1.5"/>
+              <circle cx="16.5" cy="14.5" r="1.5"/>
+            </svg>
+            <span class="btn-ver-estoque__text">VER ESTOQUE COMPLETO</span>
+            <svg class="btn-ver-estoque__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Rodapé Institucional -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div class="site-footer__brand">
+        <img src="logo gabriel motos.png" alt="Gabriel Motors" class="site-footer__logo" width="44" height="44">
+        <span class="site-footer__name">Gabriel Motors</span>
+      </div>
+      <p class="site-footer__copy">
+        &copy; 2026 Gabriel Motors. Todos os direitos reservados. Motocicletas de procedência e alta performance.
+      </p>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       MODAL DE DETALHES DA MOTOCICLETA (SESSÃO 2 & FILTRO)
+       ========================================================================= -->
+  <div id="moto-modal-backdrop" class="moto-modal-backdrop is-hidden" role="dialog" aria-modal="true" aria-labelledby="modal-modelo-title">
+    <div id="moto-modal" class="moto-modal">
+      
+      <!-- Botão Fechar Modal (X) -->
+      <button type="button" id="moto-modal-close" class="moto-modal__close" aria-label="Fechar modal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Imagem da Moto no Topo (Webmotors style: de ponta a ponta sem padding superior) -->
+      <div class="moto-modal__media" id="modal-media-trigger" tabindex="0" role="button" aria-label="Ver detalhes da moto">
+        <img id="modal-img" src="moto-cb1000r-branca.webp" alt="Moto" class="moto-modal__img">
+        <div class="moto-modal__img-reflection" aria-hidden="true"></div>
+      </div>
+
+      <!-- Informações Principais da Moto -->
+      <div class="moto-modal__content">
+        <div class="moto-modal__brand" id="modal-marca">HONDA</div>
+        <h3 class="moto-modal__model" id="modal-modelo-title">CB1000R</h3>
+        
+        <!-- Linha de Cor e Seletor de Variantes (Ex: Cores da CB1000R) -->
+        <div class="moto-modal__color-box">
+          <span class="moto-modal__color-label">Cor:</span>
+          <span class="moto-modal__color-name" id="modal-cor">Branca</span>
+          <div class="moto-modal__color-pills" id="modal-color-pills"></div>
+        </div>
+
+        <!-- Linha com Calendário (Ano) e Velocímetro (Km) -->
+        <div class="moto-modal__specs-grid">
+          <div class="moto-modal__spec">
+            <svg class="moto-modal__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span class="moto-modal__spec-val" id="modal-ano">2023</span>
+          </div>
+
+          <div class="moto-modal__spec">
+            <svg class="moto-modal__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"></circle>
+              <polyline points="12 7 12 12 15 15"></polyline>
+            </svg>
+            <span class="moto-modal__spec-val" id="modal-km">4.200 Km</span>
+          </div>
+        </div>
+
+        <!-- Linha de Localização (Cidade) -->
+        <div class="moto-modal__location">
+          <svg class="moto-modal__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <span class="moto-modal__spec-val" id="modal-cidade">Sumaré (SP)</span>
+        </div>
+
+        <!-- Rodapé do Modal: Preço em Destaque + Botões Ícone Pequenos (Favoritar Rosa e WhatsApp Verde) -->
+        <div class="moto-modal__footer-row">
+          <div class="moto-modal__price-wrapper">
+            <span class="moto-modal__price" id="modal-preco">R$ 62.900</span>
+          </div>
+
+          <div class="moto-modal__actions">
+            <!-- Botão de Favoritar: Apenas Ícone Coração Rosa -->
+            <button type="button" id="modal-btn-favorite" class="moto-modal__btn-circle moto-modal__btn-circle--favorite" aria-label="Favoritar motocicleta">
+              <svg class="moto-modal__heart-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+
+            <!-- Botão de WhatsApp: Apenas Ícone Oficial do WhatsApp Verde -->
+            <a href="#" target="_blank" rel="noopener noreferrer" id="modal-btn-whatsapp" class="moto-modal__btn-circle moto-modal__btn-circle--whatsapp" aria-label="Chamar no WhatsApp">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M17.472 14.382c-.301-.15-1.782-.879-2.058-.98-.276-.1-.477-.15-.678.15s-.778.98-.954 1.18c-.176.2-.351.226-.653.075s-1.272-.469-2.424-1.496c-.896-.799-1.501-1.787-1.677-2.088s-.019-.464.132-.614c.135-.135.301-.351.452-.527s.201-.301.301-.502.05-.376-.025-.527c-.075-.15-.678-1.631-.929-2.234-.245-.588-.494-.508-.678-.517l-.578-.01c-.2 0-.527.075-.803.376s-1.054 1.03-1.054 2.511 1.079 2.912 1.23 3.113c.15.201 2.124 3.243 5.145 4.549.719.311 1.28.497 1.718.636.723.23 1.381.197 1.902.12.58-.086 1.782-.728 2.033-1.431s.251-1.305.176-1.431c-.075-.126-.276-.201-.577-.351zM12.042 21.928c-1.776 0-3.518-.466-5.053-1.348l-.362-.208-3.754.985 1.002-3.66-.228-.363c-.968-1.541-1.479-3.328-1.479-5.161 0-5.405 4.398-9.803 9.806-9.803 2.618 0 5.08 1.02 6.929 2.871s2.868 4.314 2.868 6.932c-.001 5.407-4.4 9.805-9.729 9.805zM12.042 0C5.402 0 0 5.402 0 12.042c0 2.119.553 4.185 1.603 6.007L0 24l6.104-1.599c1.764.962 3.766 1.468 5.938 1.468 6.64 0 12.042-5.402 12.042-12.042 0-3.217-1.253-6.241-3.528-8.516s-5.299-3.529-8.514-3.529z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <!-- Pop-up Elegante de Favoritar (Sobreposto ao Modal) -->
+      <div id="favorite-popup" class="favorite-popup is-hidden" role="dialog" aria-labelledby="fav-popup-title" aria-modal="true">
+        <button type="button" id="fav-popup-close" class="favorite-popup__close" aria-label="Fechar formulário de favoritos">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+
+        <div class="favorite-popup__brand">
+          <img src="logo-gabriel-motos-transparente.png" alt="Gabriel Motos" class="favorite-popup__logo">
+        </div>
+
+        <h4 id="fav-popup-title" class="favorite-popup__title">Quer ser avisado?</h4>
+        <p class="favorite-popup__subtitle">Salve seus dados para receber novidades e atualizações sobre esta motocicleta.</p>
+
+        <form id="favorite-form" class="favorite-popup__form" novalidate>
+          <div class="favorite-popup__field">
+            <label for="fav-phone" class="favorite-popup__label">Celular</label>
+            <input type="tel" id="fav-phone" class="favorite-popup__input" placeholder="(00) 00000-0000" maxlength="15" autocomplete="tel" required>
+          </div>
+
+          <div class="favorite-popup__field">
+            <label for="fav-email" class="favorite-popup__label">E-mail</label>
+            <input type="email" id="fav-email" class="favorite-popup__input" placeholder="seuemail@exemplo.com" autocomplete="email" required>
+          </div>
+
+          <div id="fav-error-msg" class="favorite-popup__error is-hidden" role="alert"></div>
+
+          <button type="submit" id="fav-submit-btn" class="favorite-popup__submit-btn">
+            <span>Salvar</span>
+          </button>
+        </form>
+
+        <div id="fav-success-msg" class="favorite-popup__success is-hidden">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4FF00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>Preferências salvas com sucesso!</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Lógica da Hero, Vídeo, Transparência da Marca e Animações -->
+  <script src="main.js"></script>
+</body>
+</html>
