@@ -2310,6 +2310,347 @@ button {
   }
 }
 
+/* Utilitário A11y: Oculta visualmente mantendo acessível a leitores de tela */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* ==========================================================================
+   MODAIS DE SELEÇÃO DE VENDEDOR E REDIRECIONAMENTO AO WHATSAPP
+   ========================================================================== */
+
+/* ==========================================================================
+   MODAIS DE SELEÇÃO DE VENDEDOR E REDIRECIONAMENTO AO WHATSAPP
+   ========================================================================== */
+
+/* Backdrop comum escuro/translúcido */
+.seller-modal-backdrop,
+.redirect-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background-color: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.28s ease, visibility 0.28s ease;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.seller-modal-backdrop.is-hidden,
+.redirect-modal-backdrop.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Modal 1: Card com fundo selecionar-vendedor-2.jpg */
+.seller-modal-card {
+  position: relative;
+  width: 90%;
+  max-width: 420px;
+  height: min(780px, 94vh);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-image: url('selecionar-vendedor-2.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 24px 20px clamp(24px, 5vh, 48px) 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Modal 2: Card com fundo direcionamento-whatssap-2.jpg */
+.redirect-modal-card {
+  position: relative;
+  width: 90%;
+  max-width: 420px;
+  height: min(780px, 94vh);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-image: url('direcionamento-whatssap-2.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 24px 20px clamp(24px, 5vh, 48px) 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* No celular: Modal 1 permanece como um card centralizado com overlay escuro ao redor */
+@media (max-width: 768px) {
+  .seller-modal-backdrop {
+    padding: 16px;
+    background-color: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .seller-modal-card {
+    width: calc(100vw - 32px);
+    max-width: 420px;
+    height: min(720px, calc(100dvh - 32px));
+    max-height: calc(100dvh - 32px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.85);
+    background-position: center center;
+    padding: 24px 16px 20px 16px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .seller-modal-card::-webkit-scrollbar {
+    display: none;
+  }
+
+  .redirect-modal-backdrop {
+    padding: 0;
+    background-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .redirect-modal-card {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    border-radius: 0;
+    border: none;
+    background-position: 25% center;
+    padding: 20px 16px 28px 16px;
+  }
+}
+
+/* Botão Fechar X no topo direito */
+.seller-modal__close-btn {
+  position: absolute;
+  top: clamp(14px, 2.5vh, 24px);
+  right: clamp(14px, 2.5vw, 24px);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  z-index: 10;
+}
+
+.seller-modal__close-btn:hover {
+  transform: scale(1.06);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Painel de Película Fumê Vitrificada (Etapa 2) */
+.seller-glass-panel {
+  width: 90%;
+  max-width: 420px;
+  background: rgba(10, 10, 10, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: clamp(12px, 2.5vw, 18px);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7);
+  box-sizing: border-box;
+}
+
+.seller-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Item de Vendedor */
+.seller-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Gustavo com borda amarela fina de destaque */
+.seller-item--highlight {
+  border: 1.5px solid #D4FF00;
+  background: rgba(212, 255, 0, 0.05);
+  box-shadow: 0 0 12px rgba(212, 255, 0, 0.15);
+}
+
+.seller-item:hover,
+.seller-item:focus-visible {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-2px);
+}
+
+.seller-item--highlight:hover,
+.seller-item--highlight:focus-visible {
+  border-color: #E6FF4D;
+  background: rgba(212, 255, 0, 0.1);
+  box-shadow: 0 0 16px rgba(212, 255, 0, 0.25);
+}
+
+.seller-item__left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.seller-item__avatar {
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: #1a1c23;
+}
+
+.seller-item__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  text-align: left;
+}
+
+.seller-item__name {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1rem;
+  color: #FFFFFF;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.seller-item__role {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: #A0A5B0;
+  margin-top: 3px;
+  line-height: 1.2;
+}
+
+.seller-item__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.seller-item__wa-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(37, 211, 102, 0.15);
+  color: #25D366;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.seller-item:hover .seller-item__wa-icon {
+  background: #25D366;
+  color: #FFFFFF;
+  transform: scale(1.08);
+}
+
+.seller-item__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.45);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.seller-item:hover .seller-item__arrow {
+  color: #FFFFFF;
+  transform: translateX(3px);
+}
+
+/* Modal 2 (Etapa 2: Apenas abre com o nome do vendedor selecionado) */
+.redirect-modal__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+}
+
+.redirect-modal__seller-badge {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+  color: #F1F5F9;
+  background: rgba(10, 10, 10, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 8px 20px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.redirect-modal__seller-name {
+  color: #D4FF00;
+  font-weight: 700;
+}
+
+
+
 /* --------------------------------------------------------------------------
    8. ACESSIBILIDADE E PREFERS-REDUCED-MOTION
    -------------------------------------------------------------------------- */

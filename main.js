@@ -1142,14 +1142,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Link do WhatsApp com mensagem codificada em encodeURIComponent
-    if (modalBtnWhatsapp) {
-      const msg = `Olá! Tenho interesse na ${moto.modelo} ${moto.cor} (${moto.ano}) anunciada no site Gabriel Motos.`;
-      modalBtnWhatsapp.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-    }
-
     // Atualiza estado visual do botão Favoritar
     updateFavoriteButtonUI(moto.id);
+  }
+
+  // Botão WhatsApp no Modal de Moto abre o fluxo de seleção de vendedor
+  if (modalBtnWhatsapp) {
+    modalBtnWhatsapp.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const currentMoto = MOTOS_DATA[currentMotoIndex];
+      openSellerModal(currentMoto);
+    });
   }
 
   // Clique na foto da moto para foco e detalhes
@@ -1516,11 +1520,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
-      // Botão WhatsApp no Card apenas para a propagação para não abrir o modal
+      // Botão WhatsApp no Card abre o fluxo de seleção de vendedor
       const waBtn = card.querySelector('.moto-grid-card__btn-whatsapp');
       if (waBtn) {
         waBtn.addEventListener('click', (e) => {
+          e.preventDefault();
           e.stopPropagation();
+          openSellerModal(moto);
         });
       }
 
@@ -1536,6 +1542,192 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 50);
   });
 
+  // =========================================================================
+  // 8. FLUXO DE SELEÇÃO DE VENDEDOR E REDIRECIONAMENTO AO WHATSAPP (ETAPA 2)
+  // =========================================================================
+
+  // Variáveis separadas de links e fotos dos vendedores para facilitar alterações futuras
+  const WHATSAPP_LINK_GUSTAVO = 'https://wa.me/5519997065506';
+  const CAMINHO_FOTO_GUSTAVO  = 'vendedor-gustavo.jpeg';
+
+  const WHATSAPP_LINK_LEANDRO = 'https://wa.me/5519996830965';
+  const CAMINHO_FOTO_LEANDRO  = 'vendedor-leandro.jpg';
+
+  const WHATSAPP_LINK_JOAO    = 'https://wa.me/5519998076644';
+  const CAMINHO_FOTO_JOAO     = 'vendedor-joão.jpg';
+
+  // Base estática de dados dos vendedores (ordem estrita: Gustavo, Leandro, João)
+  const VENDEDORES_DATA = [
+    {
+      id: 'gustavo',
+      nome: 'Gustavo',
+      cargo: 'Vendas • Especialista em esportivas',
+      link: WHATSAPP_LINK_GUSTAVO,
+      foto: CAMINHO_FOTO_GUSTAVO,
+      destaque: true
+    },
+    {
+      id: 'leandro',
+      nome: 'Leandro',
+      cargo: 'Vendas',
+      link: WHATSAPP_LINK_LEANDRO,
+      foto: CAMINHO_FOTO_LEANDRO,
+      destaque: false
+    },
+    {
+      id: 'joao',
+      nome: 'João',
+      cargo: 'Vendas',
+      link: WHATSAPP_LINK_JOAO,
+      foto: CAMINHO_FOTO_JOAO,
+      destaque: false
+    }
+  ];
+
+  let activeMotoForSeller = null;
+
+  const sellerModalBackdrop = document.getElementById('seller-modal-backdrop');
+  const sellerModalClose = document.getElementById('seller-modal-close');
+  const sellerList = document.getElementById('seller-list');
+  const redirectModalBackdrop = document.getElementById('redirect-modal-backdrop');
+  const redirectModalClose = document.getElementById('redirect-modal-close');
+  const redirectSellerName = document.getElementById('redirect-seller-name');
+
+  /**
+   * Renderiza a lista de vendedores no painel de película fumê
+   */
+  function renderSellerList() {
+    if (!sellerList) return;
+    sellerList.innerHTML = '';
+
+    VENDEDORES_DATA.forEach((vendedor) => {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = `seller-item${vendedor.destaque ? ' seller-item--highlight' : ''}`;
+      item.setAttribute('role', 'listitem');
+      item.setAttribute('aria-label', `Conversar com ${vendedor.nome} pelo WhatsApp`);
+      item.innerHTML = `
+        <div class="seller-item__left">
+          <img src="${encodeURI(vendedor.foto)}" alt="Foto de ${vendedor.nome}" class="seller-item__avatar" loading="lazy">
+          <div class="seller-item__info">
+            <strong class="seller-item__name">${vendedor.nome}</strong>
+            <span class="seller-item__role">${vendedor.cargo}</span>
+          </div>
+        </div>
+        <div class="seller-item__right">
+          <span class="seller-item__wa-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.301-.15-1.782-.879-2.058-.98-.276-.1-.477-.15-.678.15s-.778.98-.954 1.18c-.176.2-.351.226-.653.075s-1.272-.469-2.424-1.496c-.896-.799-1.501-1.787-1.677-2.088s-.019-.464.132-.614c.135-.135.301-.351.452-.527s.201-.301.301-.502.05-.376-.025-.527c-.075-.15-.678-1.631-.929-2.234-.245-.588-.494-.508-.678-.517l-.578-.01c-.2 0-.527.075-.803.376s-1.054 1.03-1.054 2.511 1.079 2.912 1.23 3.113c.15.201 2.124 3.243 5.145 4.549.719.311 1.28.497 1.718.636.723.23 1.381.197 1.902.12.58-.086 1.782-.728 2.033-1.431s.251-1.305.176-1.431c-.075-.126-.276-.201-.577-.351zM12.042 21.928c-1.776 0-3.518-.466-5.053-1.348l-.362-.208-3.754.985 1.002-3.66-.228-.363c-.968-1.541-1.479-3.328-1.479-5.161 0-5.405 4.398-9.803 9.806-9.803 2.618 0 5.08 1.02 6.929 2.871s2.868 4.314 2.868 6.932c-.001 5.407-4.4 9.805-9.729 9.805zM12.042 0C5.402 0 0 5.402 0 12.042c0 2.119.553 4.185 1.603 6.007L0 24l6.104-1.599c1.764.962 3.766 1.468 5.938 1.468 6.64 0 12.042-5.402 12.042-12.042 0-3.217-1.253-6.241-3.528-8.516s-5.299-3.529-8.514-3.529z"/>
+            </svg>
+          </span>
+          <span class="seller-item__arrow" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </span>
+        </div>
+      `;
+
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        chooseSeller(vendedor);
+      });
+
+      sellerList.appendChild(item);
+    });
+  }
+
+  /**
+   * Abre o Modal "Escolha o Vendedor" (Modal 1)
+   */
+  function openSellerModal(motoContext = null) {
+    if (motoContext) {
+      activeMotoForSeller = motoContext;
+    }
+    if (redirectModalBackdrop) {
+      redirectModalBackdrop.classList.add('is-hidden');
+    }
+    if (sellerModalBackdrop) {
+      sellerModalBackdrop.classList.remove('is-hidden');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  /**
+   * Fecha o Modal de Seleção de Vendedor (Modal 1)
+   */
+  function closeSellerModal() {
+    if (sellerModalBackdrop) {
+      sellerModalBackdrop.classList.add('is-hidden');
+    }
+    const motoModal = document.getElementById('moto-modal-backdrop');
+    if (!motoModal || motoModal.classList.contains('is-hidden')) {
+      document.body.style.overflow = '';
+    }
+  }
+
+  /**
+   * Fecha o Modal de Redirecionamento (Modal 2)
+   */
+  function closeRedirectModal() {
+    if (redirectModalBackdrop) {
+      redirectModalBackdrop.classList.add('is-hidden');
+    }
+    const motoModal = document.getElementById('moto-modal-backdrop');
+    if (!motoModal || motoModal.classList.contains('is-hidden')) {
+      document.body.style.overflow = '';
+    }
+  }
+
+  /**
+   * Etapa 2: Ao clicar em um vendedor, fecha o modal 1 e abre o modal 2 com o nome dele.
+   * Não implementa spinner nem CANCELAR nesta etapa.
+   */
+  function chooseSeller(vendedor) {
+    closeSellerModal();
+
+    if (redirectSellerName) {
+      redirectSellerName.textContent = vendedor.nome;
+    }
+
+    if (redirectModalBackdrop) {
+      redirectModalBackdrop.classList.remove('is-hidden');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  // Event listeners para fechamento via botão X
+  sellerModalClose?.addEventListener('click', closeSellerModal);
+  redirectModalClose?.addEventListener('click', closeRedirectModal);
+
+  // Fechar ao clicar no fundo escuro fora do card
+  sellerModalBackdrop?.addEventListener('click', (e) => {
+    if (e.target === sellerModalBackdrop) {
+      closeSellerModal();
+    }
+  });
+
+  redirectModalBackdrop?.addEventListener('click', (e) => {
+    if (e.target === redirectModalBackdrop) {
+      closeRedirectModal();
+    }
+  });
+
+  // Tecla ESC para fechar modais
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (redirectModalBackdrop && !redirectModalBackdrop.classList.contains('is-hidden')) {
+        closeRedirectModal();
+      } else if (sellerModalBackdrop && !sellerModalBackdrop.classList.contains('is-hidden')) {
+        closeSellerModal();
+      }
+    }
+  });
+
+  // Inicializa lista de vendedores
+  renderSellerList();
+
   // Renderiza a grade de motos inicial
   renderMotosGrid();
 });
+

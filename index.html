@@ -513,6 +513,54 @@
     </div>
   </div>
 
+  <!-- =========================================================================
+       MODAL 1 — ESCOLHA O VENDEDOR (Fundo Vertical com Película Fumê)
+       ========================================================================= -->
+  <div id="seller-modal-backdrop" class="seller-modal-backdrop is-hidden" role="dialog" aria-modal="true" aria-labelledby="seller-modal-sr-title">
+    <div class="seller-modal-card" id="seller-modal-card">
+      <!-- Botão Fechar X no topo direito -->
+      <button type="button" id="seller-modal-close" class="seller-modal__close-btn" aria-label="Fechar seleção de vendedor">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <h2 id="seller-modal-sr-title" class="sr-only">Escolha o Vendedor</h2>
+
+      <!-- Painel de Película Fumê Vitrificada com Lista de Vendedores -->
+      <div class="seller-glass-panel" id="seller-glass-panel">
+        <div class="seller-list" id="seller-list" role="list">
+          <!-- Linhas de vendedores geradas via JavaScript a partir de VENDEDORES_DATA -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2 — DIRECIONANDO VOCÊ PARA O WHATSAPP... (Fundo Vertical)
+       ========================================================================= -->
+  <div id="redirect-modal-backdrop" class="redirect-modal-backdrop is-hidden" role="dialog" aria-modal="true" aria-labelledby="redirect-modal-sr-title">
+    <div class="redirect-modal-card" id="redirect-modal-card">
+      <!-- Botão Fechar X no topo direito -->
+      <button type="button" id="redirect-modal-close" class="seller-modal__close-btn" aria-label="Fechar redirecionamento">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <h2 id="redirect-modal-sr-title" class="sr-only">Direcionando para o WhatsApp</h2>
+
+      <!-- Conteúdo do Modal 2 com o nome do vendedor selecionado -->
+      <div class="redirect-modal__content">
+        <div class="redirect-modal__seller-badge">
+          <span>Atendimento com <strong id="redirect-seller-name" class="redirect-modal__seller-name">Gustavo</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Lógica da Hero, Vídeo, Transparência da Marca e Animações -->
   <script src="main.js"></script>
 </body>
