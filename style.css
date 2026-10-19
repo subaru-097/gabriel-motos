@@ -249,6 +249,26 @@ button {
   padding: 0;
 }
 
+/* Encurtamento e enquadramento da seção Hero exclusivamente na versão Desktop */
+@media (min-width: 769px) {
+  .hero {
+    aspect-ratio: auto;
+    height: 90vh;
+    min-height: 580px;
+    background-position: 50% 0%;
+  }
+
+  .hero__video-wrapper {
+    background-position: 50% 0%;
+  }
+
+  .hero__video {
+    object-position: 50% 0%;
+    transform: scale(1);
+    transform-origin: center center;
+  }
+}
+
 /* Degradê Superior: ::before (160px de altura) */
 .hero::before {
   content: '';
@@ -1201,7 +1221,7 @@ button {
 @media (max-width: 1200px) {
   .hero__video {
     object-fit: cover;
-    object-position: 50% 50%;
+    object-position: 50% 0%;
   }
 
   .hero__content-side {
