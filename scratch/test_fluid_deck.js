@@ -92,7 +92,7 @@ async function testFluidDeck() {
 
     const btnPrev = document.getElementById('styles-prev');
     const newPrev = btnPrev.cloneNode(true);
-    prevBtn.parentNode.replaceChild(newPrev, prevBtn);
+    btnPrev.parentNode.replaceChild(newPrev, btnPrev);
     newPrev.addEventListener('click', () => {
       window.fluidSetActiveStyle(curIdx - 1);
     });

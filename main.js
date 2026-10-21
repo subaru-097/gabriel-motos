@@ -312,12 +312,24 @@ document.addEventListener('DOMContentLoaded', () => {
         loader.classList.add('is-hidden');
       }
 
+      // Garante que o vídeo de loop permaneça pausado no início até a intro terminar
+      if (loopVideo) {
+        try {
+          loopVideo.pause();
+          loopVideo.currentTime = 0;
+        } catch (e) {
+          /* no-op */
+        }
+      }
+
       // Inicia a reprodução do vídeo da introdução
       if (introVideo) {
         const playPromise = introVideo.play();
         if (playPromise !== undefined) {
           playPromise.catch((err) => {
             console.info('Gabriel Motors: Autoplay restringido pelo navegador.', err);
+            // Fallback imediato: se o autoplay for bloqueado, revela o conteúdo da Hero
+            triggerHeroText('autoplay restriction fallback');
           });
         }
       }
@@ -332,13 +344,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
-   * Verifica se ambos os vídeos estão prontos (readyState >= 4)
+   * Verifica se ambos os vídeos estão prontos para exibição sem travar a tela
    */
   function checkVideosReady() {
     if (isLoaderDismissed) return;
 
-    const introReady = !introVideo || introVideo.readyState >= 4;
-    const loopReady = !loopVideo || loopVideo.readyState >= 4;
+    // Com preload="metadata", readyState >= 2 (HAVE_CURRENT_DATA) ou superior é suficiente para reprodução imediata
+    const introReady = !introVideo || introVideo.readyState >= 2;
+    const loopReady = !loopVideo || loopVideo.readyState >= 1;
 
     const introPct = getVideoProgress(introVideo);
     const loopPct = getVideoProgress(loopVideo);
@@ -358,6 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
   [introVideo, loopVideo].forEach((v) => {
     if (!v) return;
     v.addEventListener('progress', checkVideosReady);
+    v.addEventListener('loadedmetadata', checkVideosReady);
     v.addEventListener('canplay', checkVideosReady);
     v.addEventListener('canplaythrough', checkVideosReady);
     v.addEventListener('loadeddata', checkVideosReady);
@@ -402,11 +416,21 @@ document.addEventListener('DOMContentLoaded', () => {
     isHandoverDone = true;
 
     if (loopVideo) {
+      // Garante que o loop inicie exatamente do início do arquivo hero.2
+      try {
+        loopVideo.currentTime = 0;
+      } catch (e) {
+        /* no-op */
+      }
+
       // Dispara play no vídeo do loop
       const loopPromise = loopVideo.play();
       if (loopPromise !== undefined) {
         loopPromise.catch((err) => {
           console.warn('[Hero Animation] Falha ao iniciar vídeo do loop.', err);
+          if (!textShown) {
+            triggerHeroText('loop play failure fallback');
+          }
         });
       }
 
@@ -429,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Ao disparar o evento "ended" da intro (se intro durar menos de 6s ou terminar)
+    // Ao disparar o evento "ended" da intro (executa uma única vez)
     introVideo.addEventListener('ended', () => {
       console.log(`[Hero Animation] introVideo 'ended' disparado no segundo ${introVideo.currentTime.toFixed(3)}s.`);
       if (!textShown) {
@@ -452,6 +476,14 @@ document.addEventListener('DOMContentLoaded', () => {
     loopVideo.addEventListener('play', () => {
       const isTextVisible = heroText ? heroText.classList.contains('show') : false;
       console.log(`[Hero Animation] loopVideo iniciado (play). textShown = ${textShown}, .show presente = ${isTextVisible}`);
+    });
+
+    // Fallback caso ocorra erro no loop
+    loopVideo.addEventListener('error', (err) => {
+      console.warn('[Hero Animation] Erro na reprodução do loop.', err);
+      if (!textShown) {
+        triggerHeroText('loopVideo error fallback');
+      }
     });
 
     // Monitora os ciclos de loop para certificar a permanência eterna do texto
@@ -663,18 +695,38 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   let currentStyleIndex = 1; // "Alta Performance / Esportiva" como destaque inicial (conforme referência)
-  let isAnimating = false;
+  let animationCleanupRaf = null;
 
   function updateDeckPositions() {
     const total = styleCards.length;
+    const isReduced = prefersReducedMotion.matches;
+
     styleCards.forEach((card, idx) => {
       // Posição simétrica na pilha horizontal: -2 (esquerda atrás), -1 (esquerda), 0 (centro ativo), 1 (direita), 2 (direita atrás)
       let pos = (idx - currentStyleIndex) % total;
       if (pos > total / 2) pos -= total;
       if (pos < -total / 2) pos += total;
 
-      card.dataset.pos = pos;
-      card.dataset.stack = pos;
+      const oldPos = parseInt(card.dataset.pos, 10);
+      const isWrapping = !isNaN(oldPos) && ((oldPos === -2 && pos === 2) || (oldPos === 2 && pos === -2) || Math.abs(pos - oldPos) > 2);
+
+      if (isWrapping && !isReduced) {
+        // Carta dando a volta pelos fundos: reposiciona sem transição visível através do centro
+        card.style.transition = 'none';
+        card.style.opacity = '0';
+        card.dataset.pos = pos;
+        card.dataset.stack = pos;
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            card.style.transition = '';
+            card.style.opacity = '';
+          });
+        });
+      } else {
+        card.style.transition = '';
+        card.dataset.pos = pos;
+        card.dataset.stack = pos;
+      }
 
       if (pos === 0) {
         card.classList.add('is-active');
@@ -700,60 +752,25 @@ document.addEventListener('DOMContentLoaded', () => {
   updateDeckPositions();
 
   function setActiveStyle(index, explicitDirection = 0) {
-    if (isAnimating || !styleCards.length) return;
+    if (!styleCards.length) return;
     const total = styleCards.length;
     const targetIndex = ((index % total) + total) % total;
 
-    // Se já é a carta da frente, não dispara
+    // Se já é a carta da frente e sem direção explícita, não dispara
     if (targetIndex === currentStyleIndex && explicitDirection === 0) return;
-
-    // Bloqueia cliques repetidos durante a transição
-    isAnimating = true;
-
-    const oldIndex = currentStyleIndex;
-    let direction = explicitDirection;
-    if (direction === 0) {
-      let diff = (targetIndex - oldIndex) % total;
-      if (diff > total / 2) diff -= total;
-      if (diff < -total / 2) diff += total;
-      direction = diff >= 0 ? 1 : -1;
-    }
-
-    const oldCard = styleCards[oldIndex];
-    const isReduced = prefersReducedMotion.matches;
-
-    // Ativa will-change: transform somente durante a animação
-    styleCards.forEach((c) => {
-      c.style.willChange = 'transform, opacity';
-    });
-
-    if (!isReduced && oldCard) {
-      if (direction > 0) {
-        oldCard.classList.add('slide-exit-next');
-      } else {
-        oldCard.classList.add('slide-exit-prev');
-      }
-    }
 
     currentStyleIndex = targetIndex;
 
-    // Sincroniza dinamicamente a grade de estoque abaixo com a carta ativa
+    // Sincroniza dinamicamente a grade de estoque abaixo com a carta ativa (fade de 200-300ms)
     syncGridWithActiveStyle(targetIndex);
 
-    // Atualiza a pilha de cartas (a próxima carta sobe para a frente)
-    setTimeout(() => {
+    // Atualiza imediatamente a pilha de cartas via requestAnimationFrame, permitindo encadeamento contínuo
+    if (animationCleanupRaf) {
+      cancelAnimationFrame(animationCleanupRaf);
+    }
+    animationCleanupRaf = requestAnimationFrame(() => {
       updateDeckPositions();
-    }, isReduced ? 0 : 50);
-
-    // Finaliza animação após 720ms e remove will-change
-    setTimeout(() => {
-      styleCards.forEach((c) => {
-        c.classList.remove('slide-exit-next', 'slide-exit-prev');
-        c.style.willChange = 'auto';
-        c.style.transform = '';
-      });
-      isAnimating = false;
-    }, 720);
+    });
   }
 
   if (btnStylePrev) {
@@ -842,7 +859,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let isHorizontalSwipe = false;
 
     deckContainer.addEventListener('touchstart', (e) => {
-      if (isAnimating) return;
       if (e.touches && e.touches.length === 1) {
         touchStartX = e.touches[0].clientX;
         touchStartY = e.touches[0].clientY;
@@ -885,7 +901,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const activeCard = document.querySelector('.style-card[data-pos="0"]');
         if (activeCard) {
           // A carta acompanha o dedo em tempo real perfeitamente reta (sem rotação)
-          activeCard.style.transform = `translate3d(${touchDeltaX}px, 0, 0) scale(1)`;
+          activeCard.style.transform = `translate3d(${touchDeltaX}px, 0, 0) scale(1.02)`;
         }
       }
     }, { passive: true });
@@ -899,7 +915,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const activeCard = document.querySelector('.style-card[data-pos="0"]');
       if (activeCard) {
-        activeCard.style.transition = 'transform 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 700ms cubic-bezier(0.22, 1, 0.36, 1)';
+        activeCard.style.transition = 'transform 480ms cubic-bezier(0.22, 1, 0.36, 1), opacity 480ms cubic-bezier(0.22, 1, 0.36, 1)';
       }
 
       const threshold = 45;
@@ -910,11 +926,11 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         // Retorna suavemente para a posição frontal da pilha
         if (activeCard) {
-          activeCard.style.transform = 'translate3d(0, 0, 0) scale(1)';
+          activeCard.style.transform = 'translate3d(0, 0, 0) scale(1.02)';
           setTimeout(() => {
             activeCard.style.transition = '';
             activeCard.style.willChange = 'auto';
-          }, 700);
+          }, 480);
         }
       }
     }, { passive: true });

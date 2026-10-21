@@ -998,12 +998,13 @@ button {
   user-select: none;
   background: #06070a;
   box-sizing: border-box;
-  /* Transição suave do baralho animando exclusivamente transform e opacity */
-  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
-              opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
-              filter 700ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 700ms cubic-bezier(0.22, 1, 0.36, 1),
-              border-color 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  /* Transição fluida animando apenas propriedades de composição (transform, opacity) com curva suave */
+  transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 480ms cubic-bezier(0.22, 1, 0.36, 1),
+              filter 480ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 480ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 480ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
 }
 
 .style-card__inner {
@@ -1039,15 +1040,15 @@ button {
    ESTADOS DE PILHA DO BARALHO (CENTRAL RETO, LATERAIS ESQUERDA E DIREITA RETAS)
    ========================================================================== */
 
-/* Carta 0: Centro / Principal (em frente, inteira, destaque total) */
+/* Carta 0: Centro / Principal (em frente, inteira, destaque total com profundidade) */
 .style-card[data-pos="0"],
 .style-card.is-active {
-  transform: translate3d(0, 0, 0) scale(1);
+  transform: translate3d(0, 0, 0) scale(1.02);
   opacity: 1;
   filter: brightness(1);
   z-index: 10;
   border: 1px solid rgba(212, 255, 0, 0.45);
-  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.95), 0 0 30px rgba(212, 255, 0, 0.16);
+  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.95), 0 0 32px rgba(212, 255, 0, 0.18);
   pointer-events: auto;
   cursor: default;
 }
@@ -1102,20 +1103,6 @@ button {
   cursor: pointer;
 }
 
-/* Animações de Deslize Lateral (Estilo Baralho) */
-.style-card.slide-exit-next {
-  transform: translate3d(-140%, 0, 0) scale(0.92) !important;
-  opacity: 0 !important;
-  z-index: 20 !important;
-  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 700ms cubic-bezier(0.22, 1, 0.36, 1) !important;
-}
-
-.style-card.slide-exit-prev {
-  transform: translate3d(140%, 0, 0) scale(0.92) !important;
-  opacity: 0 !important;
-  z-index: 20 !important;
-  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 700ms cubic-bezier(0.22, 1, 0.36, 1) !important;
-}
 
 /* Indicador de Barras de Progresso Embaixo */
 .styles-progress {
@@ -1410,9 +1397,10 @@ button {
   /* Na pilha mobile horizontal, cartas laterais visíveis sutilmente nas bordas */
   .style-card[data-pos="0"],
   .style-card.is-active {
-    transform: translate3d(0, 0, 0) scale(1);
+    transform: translate3d(0, 0, 0) scale(1.02);
     opacity: 1;
     z-index: 10;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), 0 0 22px rgba(212, 255, 0, 0.16);
   }
 
   .style-card[data-pos="1"] {
